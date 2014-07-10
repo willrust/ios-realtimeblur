@@ -58,31 +58,44 @@ const CGFloat UIERealTimeBlurViewTintColorAlpha = 0.1;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
-        // Initialization code
-        self.clipsToBounds = YES;
-        
-        // on iOS7 uses the native UIToolbar implementation
-        if (UIEDeviceSystemMajorVersion() > 6) {
-            
-            // flag for os version
-            _ios7 = YES;
-            _nativeBlurView = [[UIToolbar alloc] initWithFrame:self.bounds];
-            
-            // add the toolbar layer as sublayer
-            [self.layer insertSublayer:_nativeBlurView.layer atIndex:0];
-        
-        } else {
-        
-            _tintLayer = [[CALayer alloc] init];
-            _tintLayer.frame = self.bounds;
-            _tintLayer.opacity = UIERealTimeBlurViewTintColorAlpha;
-            
-            //default tint color
-            self.tintColor = [UIColor clearColor];
-        }
+        [self commonInit];
     }
     return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit
+{
+    // Initialization code
+    self.clipsToBounds = YES;
+    
+    // on iOS7 uses the native UIToolbar implementation
+    if (UIEDeviceSystemMajorVersion() > 6) {
+        
+        // flag for os version
+        _ios7 = YES;
+        _nativeBlurView = [[UIToolbar alloc] initWithFrame:self.bounds];
+        
+        // add the toolbar layer as sublayer
+        [self.layer insertSublayer:_nativeBlurView.layer atIndex:0];
+        
+    } else {
+        
+        _tintLayer = [[CALayer alloc] init];
+        _tintLayer.frame = self.bounds;
+        _tintLayer.opacity = UIERealTimeBlurViewTintColorAlpha;
+        
+        //default tint color
+        self.tintColor = [UIColor clearColor];
+    }
 }
 
 - (void)setTintColor:(UIColor*)tintColor
